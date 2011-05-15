@@ -4,8 +4,10 @@
  */
 package apiservice;
 
-import messagehubservice.stub.ItemWebService_Service;
+import externalservice.stub.ItemWebService_Service;
 import model.Item;
+import util.BeanUtils;
+import util.ConvertException;
 
 /**
  *
@@ -13,16 +15,10 @@ import model.Item;
  */
 public class ItemService {
 
-    public Item getItem(String id) {
-        ItemWebService_Service factory = new ItemWebService_Service();
-        messagehubservice.stub.ItemWebService service = factory.getItemWebServicePort();
-        messagehubservice.stub.Item item = service.get(id);
-     
-        Item item2 = new Item();
-        item2.setId(item.getId());
-        item2.setTitle(item.getTitle());
-        
-        return item2;
+    public Item getItem(String id) throws ConvertException {
+        externalservice.stub.ItemWebService service = new ItemWebService_Service().getItemWebServicePort();
+        externalservice.stub.Item item = service.get(id);
+
+        return BeanUtils.convert(item, new Item());
     }
-    
 }

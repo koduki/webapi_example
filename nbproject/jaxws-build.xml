@@ -23,9 +23,9 @@
     </target>
     <target name="wsgen-ItemWebService" depends="wsgen-init">
         <copy todir="${build.classes.dir}/META-INF">
-            <fileset dir="${webinf.dir}" includes="wsit-externalservice.ItemWebService.xml"/>
+            <fileset dir="${webinf.dir}" includes="wsit-messagehub.ItemWebService.xml"/>
         </copy>
-        <wsgen sourcedestdir="${build.generated.sources.dir}/jax-ws" resourcedestdir="${build.generated.sources.dir}/jax-ws/resources/" destdir="${build.generated.sources.dir}/jax-ws" verbose="true" xendorsed="true" keep="true" genwsdl="true" sei="externalservice.ItemWebService">
+        <wsgen sourcedestdir="${build.generated.sources.dir}/jax-ws" resourcedestdir="${build.generated.sources.dir}/jax-ws/resources/" destdir="${build.generated.sources.dir}/jax-ws" verbose="true" xendorsed="true" keep="true" genwsdl="true" sei="messagehub.ItemWebService">
             <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
         </wsgen>
     </target>
@@ -60,5 +60,21 @@
         <delete dir="${build.generated.sources.dir}/jax-ws/messagehubservice/stub"/>
         <delete dir="${build.generated.dir}/jax-wsCache/ItemWebService"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-ItemWebService"/>
+    <target name="wsimport-client-ItemWebService_1" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ItemWebService_1"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ItemWebService_1" destdir="${build.generated.dir}/jax-wsCache/ItemWebService_1" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/ItemWebService_1/wsdl/localhost_8080/phtome/ItemWebService.wsdl" catalog="catalog.xml" extension="true" verbose="true" wsdlLocation="http://localhost:8080/phtome/ItemWebService?wsdl" xnocompile="true" xendorsed="true" package="externalservice.stub">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/ItemWebService_1/wsdl/localhost_8080/phtome/ItemWebService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ItemWebService_1"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ItemWebService_1">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ItemWebService_1" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/externalservice/stub"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/ItemWebService_1"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-ItemWebService, wsimport-client-ItemWebService_1"/>
 </project>
